@@ -8,6 +8,7 @@ description: |
   customizable notifications. For more information on IRC, see
   http://irchelp.org/.
 confinement: strict
+grade: devel
 apps:
   hexchat:
     command: desktop-launch $SNAP/bin/hexchat
