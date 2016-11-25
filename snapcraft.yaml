@@ -17,7 +17,7 @@ parts:
   hexchat:
     source: https://dl.hexchat.net/hexchat/hexchat-2.12.3.tar.xz
     plugin: autotools
-    configflags: [--enable-python=python3 --disable-dbus --disable-debug]
+    configflags: [--enable-python=python3, --disable-dbus, --disable-debug]
     snap:
       - -lib/pkgconfig
       - -include
