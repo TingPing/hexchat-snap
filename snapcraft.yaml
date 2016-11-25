@@ -19,13 +19,18 @@ parts:
     plugin: autotools
     snap:
       - -lib/pkgconfig
+      - -include
     build-packages:
       - intltool
       - libtool
-      - libproxy-dev
       - libssl-dev
-      - python-dev
+      - libdbus-glib-1-dev
+      - libproxy-dev
+      - libnotify-dev
+      - libcanberra-dev
+      - python3-dev
       - libperl-dev
-      - liblua5.3-dev
+      - libluajit-5.1-dev
+      
     after:
       - desktop-gtk2
