@@ -30,6 +30,7 @@ parts:
 # FIXME: We can't own session bus name
 #      - libdbus-glib-1-dev
       - libproxy-dev
+# FIXME: Notifications can't see the desktop file or icon
       - libnotify-dev
 # FIXME: Audio notifications don't work
 #      - libcanberra-dev
