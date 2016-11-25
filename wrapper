@@ -1,0 +1,6 @@
+#!/bin/sh
+
+export LUA_PATH="$SNAP/usr/share/lua/5.1/?.lua"
+export LUA_CPATH="$SNAP/usr/lib/$SNAP_LAUNCHER_ARCH_TRIPLET/lua/5.1/?.so"
+export HEXCHAT_LIBDIR="$SNAP/lib/hexchat/plugins"
+exec "$SNAP/bin/hexchat" "$@"

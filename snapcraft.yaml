@@ -11,26 +11,42 @@ confinement: strict
 grade: devel
 apps:
   hexchat:
-    command: desktop-launch $SNAP/bin/hexchat
+    command: desktop-launch $SNAP/bin/hexchat-wrapper
     plugs: [unity7, gsettings, pulseaudio, network, network-bind, home]
 parts:
   hexchat:
     source: https://dl.hexchat.net/hexchat/hexchat-2.12.3.tar.xz
     plugin: autotools
+    configflags: [--enable-python=python3 --disable-dbus --disable-debug]
     snap:
       - -lib/pkgconfig
       - -include
     build-packages:
       - intltool
       - libtool
+# FIXME: We would have to install every spell check language
+#      - iso-codes
       - libssl-dev
-      - libdbus-glib-1-dev
+# FIXME: We can't own session bus name
+#      - libdbus-glib-1-dev
       - libproxy-dev
       - libnotify-dev
-      - libcanberra-dev
+# FIXME: Audio notifications don't work
+#      - libcanberra-dev
       - python3-dev
       - libperl-dev
       - libluajit-5.1-dev
-      
+    stage-packages:
+#      - sound-theme-freedesktop
+#      - iso-codes
+      - lua-lgi
+      - gir1.2-glib-2.0
+      - gir1.2-soup-2.4
+      - gir1.2-gtk-2.0
     after:
       - desktop-gtk2
+  hexchat-copy:
+    source: .
+    plugin: dump
+    organize:
+      wrapper: bin/hexchat-wrapper
