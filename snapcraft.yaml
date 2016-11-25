@@ -39,6 +39,7 @@ parts:
     stage-packages:
 #      - sound-theme-freedesktop
 #      - iso-codes
+#      - libenchant1c2a
       - lua-lgi
       - gir1.2-glib-2.0
       - gir1.2-soup-2.4
