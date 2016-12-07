@@ -8,14 +8,15 @@ description: |
   customizable notifications. For more information on IRC, see
   http://irchelp.org/.
 confinement: strict
-grade: stable
+grade: devel
 apps:
   hexchat:
     command: desktop-launch $SNAP/bin/hexchat-wrapper
     plugs: [unity7, gsettings, pulseaudio, network, network-bind, home]
 parts:
   hexchat:
-    source: https://dl.hexchat.net/hexchat/hexchat-2.12.3.tar.xz
+    source-type: git
+    source: https://github.com/hexchat/hexchat.git
     plugin: autotools
     configflags: [--enable-python=python3, --disable-dbus, --disable-debug]
     snap:
