@@ -24,6 +24,7 @@ parts:
       - -include
     build-packages:
       - intltool
+      - autoconf-archive
       - libtool
 # FIXME: We would have to install every spell check language
 #      - iso-codes
