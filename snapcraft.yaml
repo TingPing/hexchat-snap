@@ -1,5 +1,5 @@
 name: hexchat
-version: "2.12.3"
+version: "2.12.4"
 summary: HexChat IRC Client
 description: |
   HexChat is a graphical IRC client with a GTK+ GUI. Features include Python
@@ -15,7 +15,7 @@ apps:
     plugs: [unity7, gsettings, pulseaudio, network, network-bind, home]
 parts:
   hexchat:
-    source: https://dl.hexchat.net/hexchat/hexchat-2.12.3.tar.xz
+    source: https://dl.hexchat.net/hexchat/hexchat-2.12.4.tar.xz
     plugin: autotools
     configflags: [--enable-python=python3, --disable-dbus, --disable-debug]
     snap:
