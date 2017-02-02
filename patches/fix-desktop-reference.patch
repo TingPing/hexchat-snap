@@ -1,0 +1,31 @@
+From 01f0f237bb5f0208ec1feab5aa44df7166ebfa74 Mon Sep 17 00:00:00 2001
+From: TingPing <tingping@tingping.se>
+Date: Thu, 2 Feb 2017 03:54:49 -0500
+Subject: [PATCH] notifications: Workaround Snap renaming desktop file
+
+---
+ src/fe-gtk/notifications/notification-libnotify.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/fe-gtk/notifications/notification-libnotify.c b/src/fe-gtk/notifications/notification-libnotify.c
+index 9114837..23bfecd 100644
+--- a/src/fe-gtk/notifications/notification-libnotify.c
++++ b/src/fe-gtk/notifications/notification-libnotify.c
+@@ -35,12 +35,12 @@ notification_backend_show (const char *title, const char *text)
+ 		text = g_markup_escape_text (text, -1);
+ 
+ #if NOTIFY_CHECK_VERSION(0,7,0)
+-	notification = notify_notification_new (title, text, "hexchat");
++	notification = notify_notification_new (title, text, NULL);
+ #else
+ 	notification = notify_notification_new (title, text, "hexchat", NULL);
+ #endif
+ #if NOTIFY_CHECK_VERSION(0,6,0)
+-	notify_notification_set_hint (notification, "desktop-entry", g_variant_new_string ("hexchat"));
++	notify_notification_set_hint (notification, "desktop-entry", g_variant_new_string ("hexchat_hexchat"));
+ #else
+ 	notify_notification_set_hint_string (notification, "desktop-entry", "hexchat");
+ #endif
+-- 
+2.7.4
+

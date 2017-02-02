@@ -19,13 +19,16 @@ slots:
     name: org.hexchat.service
 parts:
   hexchat:
-    source: https://dl.hexchat.net/hexchat/hexchat-2.12.4.tar.xz
-    plugin: autotools
-    configflags: [--enable-python=python3, --disable-debug]
-    snap:
+    source: https://dl.hexchat.net/hexchat/hexchat-2.12.4-repack.tar.xz
+    plugin: autotools-patch
+    configflags: [--enable-python=python3, --disable-debug, --disable-glibtest]
+    patches:
+      - fix-desktop-reference.patch
+    prime:
       - -lib/pkgconfig
       - -include
     build-packages:
+      - patch
       - intltool
       - libtool
 # FIXME: We would have to install every spell check language
