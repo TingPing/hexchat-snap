@@ -24,6 +24,7 @@ parts:
     configflags: [--enable-python=python3, --disable-debug, --disable-glibtest]
     patches:
       - fix-desktop-reference.patch
+      - fix-opening-urls.patch
     prime:
       - -lib/pkgconfig
       - -include

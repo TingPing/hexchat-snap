@@ -1,0 +1,32 @@
+From d653d77bb4a241525321862b5051df7047f5990d Mon Sep 17 00:00:00 2001
+From: TingPing <tingping@tingping.se>
+Date: Thu, 2 Feb 2017 04:58:43 -0500
+Subject: [PATCH] Fix opening URLs in a Snap
+
+---
+ src/fe-gtk/fe-gtk.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/fe-gtk/fe-gtk.c b/src/fe-gtk/fe-gtk.c
+index 0f23f7f..2c767fa 100644
+--- a/src/fe-gtk/fe-gtk.c
++++ b/src/fe-gtk/fe-gtk.c
+@@ -1071,7 +1071,14 @@ fe_open_url_inner (const char *url)
+ #elif defined(__APPLE__)
+     osx_show_uri (url);
+ #else
+-	gtk_show_uri (NULL, url, GDK_CURRENT_TIME, NULL);
++	char *argv[] = {
++		"gdbus", "call", "--session",
++		"--object-path=/",
++		"--dest=com.canonical.SafeLauncher",
++		"--method=com.canonical.SafeLauncher.OpenURL",
++		url, NULL
++	};
++	g_spawn_async (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL);
+ #endif
+ }
+ 
+-- 
+2.7.4
+
