@@ -1,0 +1,26 @@
+From 43120886961a90afafc5c03792431a16940169df Mon Sep 17 00:00:00 2001
+From: TingPing <tingping@tingping.se>
+Date: Sun, 5 Feb 2017 08:25:59 -0500
+Subject: [PATCH] Use absolute path for icon
+
+Snap doesn't actually handle themed names at all
+---
+ data/misc/hexchat.desktop.in.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/misc/hexchat.desktop.in.in b/data/misc/hexchat.desktop.in.in
+index a778e9b..5936792 100644
+--- a/data/misc/hexchat.desktop.in.in
++++ b/data/misc/hexchat.desktop.in.in
+@@ -4,7 +4,7 @@ _GenericName=IRC Client
+ _Comment=Chat with other people online
+ _Keywords=IM;Chat;
+ Exec=@exec_command@
+-Icon=hexchat
++Icon=/share/icons/hicolor/scalable/apps/hexchat.svg
+ Terminal=false
+ Type=Application
+ Categories=GTK;Network;IRCClient;
+-- 
+2.7.4
+

@@ -12,6 +12,7 @@ grade: stable
 apps:
   hexchat:
     command: desktop-launch $SNAP/bin/hexchat-wrapper
+    desktop: share/applications/hexchat.desktop
     plugs: [unity7, gsettings, pulseaudio, network, network-bind, home]
 slots:
   dbus:
@@ -25,6 +26,7 @@ parts:
     patches:
       - fix-desktop-reference.patch
       - fix-opening-urls.patch
+      - use-absolute-icon-path.patch
     prime:
       - -lib/pkgconfig
       - -include
