@@ -1,7 +1,7 @@
 name: hexchat
 version: "2.12.4"
 summary: HexChat IRC Client
-description: |
+description: >
   HexChat is a graphical IRC client with a GTK+ GUI. Features include Python
   and Perl scripting support, a plugin API, multiple server/channel windows,
   spell checking, multiple authentication methods including SASL, and
