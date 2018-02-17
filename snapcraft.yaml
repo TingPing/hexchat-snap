@@ -9,55 +9,91 @@ description: >
   http://irchelp.org/.
 confinement: strict
 grade: stable
+plugs:
+  gnome-3-24-platform:
+    interface: content
+    target: $SNAP/gnome-platform
+    default-provider: gnome-3-24:gnome-3-24-platform
+slots:
+  hexchat:
+    interface: dbus
+    bus: session
+    name: org.hexchat.service
 apps:
   hexchat:
     command: desktop-launch $SNAP/bin/hexchat-wrapper
     desktop: share/applications/hexchat.desktop
-    plugs: [unity7, gsettings, pulseaudio, network, network-bind, home]
-slots:
-  dbus:
-    bus: session
-    name: org.hexchat.service
+    plugs:
+      - unity7
+      - desktop-legacy
+      - x11
+#      - pulseaudio
+      - network
+      - network-bind
 parts:
+  desktop-gnome-platform:
+    stage:
+      # We override this in hexchat-copy with gtk2 version
+      - -flavor-select
   hexchat:
+# FIXME: Spell check needs dictionaries
+# FIXME: Notifications can't see the desktop file or icon
+    after: [desktop-gnome-platform]
     source: https://dl.hexchat.net/hexchat/hexchat-2.12.4-repack.tar.xz
     plugin: autotools-patch
-    configflags: [--enable-python=python3, --disable-debug, --disable-glibtest]
+    configflags:
+      - --enable-python=python3
+      - --disable-debug
+      - --disable-glibtest
+# FIXME: Compiles build path into project...
+      - --disable-isocodes
+# FIXME: Audio notifications don't work
+      - --disable-libcanberra
     patches:
       - fix-desktop-reference.patch
       - fix-opening-urls.patch
       - use-absolute-icon-path.patch
-    prime:
-      - -lib/pkgconfig
-      - -include
     build-packages:
       - patch
       - intltool
       - libtool
-# FIXME: We would have to install every spell check language
-#      - iso-codes
       - libssl-dev
-      - libdbus-glib-1-dev
-      - libproxy-dev
-# FIXME: Notifications can't see the desktop file or icon
-      - libnotify-dev
-# FIXME: Audio notifications don't work
-#      - libcanberra-dev
       - python3-dev
       - libperl-dev
       - libluajit-5.1-dev
+    prime:
+      - -include
+      - -lib/pkgconfig
+      - -share/appdata
+      - -share/man
+# Incorrectly pulled in libs that are in gnome-platform
+      - -usr/lib/*linux*/libnotify.so*
+      - -usr/lib/*linux*/libdbus-glib-1.so*
+      - -usr/lib/*linux*/libtdb.so*
+      - -usr/lib/*linux*/libltdl.so*
+  lua-lgi:
+    plugin: nil
     stage-packages:
-#      - sound-theme-freedesktop
-#      - iso-codes
-#      - libenchant1c2a
       - lua-lgi
+    prime:
+      - usr/share/lua/5.1
+      - usr/lib/*linux*/lua/5.1
+      - usr/lib/*linux*/girepository-1.0
+      - usr/lib/*linux*/libffi.so*
+      - usr/lib/*linux*/libgirepository-1.0.so*
+      - usr/lib/*linux*/liblua5.1*.so*
+  gi-bindings:
+    plugin: nil
+    stage-packages:
+      - gir1.2-freedesktop
       - gir1.2-glib-2.0
       - gir1.2-soup-2.4
       - gir1.2-gtk-2.0
-    after:
-      - desktop-gtk2
-  hexchat-copy:
-    source: .
+    prime:
+      - usr/lib/*linux*/girepository-1.0
+      - usr/lib/girepository-1.0
+  wrappers:
+    source: data
     plugin: dump
     organize:
       wrapper: bin/hexchat-wrapper
