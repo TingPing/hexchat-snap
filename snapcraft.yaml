@@ -21,8 +21,13 @@ slots:
     name: org.hexchat.service
 apps:
   hexchat:
-    command: desktop-launch $SNAP/bin/hexchat-wrapper
+    command: desktop-launch hexchat-wrapper
     desktop: share/applications/hexchat.desktop
+    environment:
+      LUA_PATH: $SNAP/usr/share/lua/5.1/?.lua
+      HEXCHAT_LIBDIR: $SNAP/lib/hexchat/plugins
+# FIXME: Can't use $SNAP_LAUNCHER_ARCH_TRIPLET here
+#      LUA_CPATH: $SNAP/usr/lib/$SNAP_LAUNCHER_ARCH_TRIPLET/lua/5.1/?.so
     plugs:
       - unity7
       - desktop-legacy
