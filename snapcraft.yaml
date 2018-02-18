@@ -40,8 +40,13 @@ parts:
 # FIXME: Notifications can't see the desktop file or icon
     after: [desktop-gnome-platform]
     source: https://dl.hexchat.net/hexchat/hexchat-2.12.4-repack.tar.xz
-    plugin: autotools-patch
+    plugin: autotools
+    # The exported desktop file is renamed and requires absolute path to icon
+    prepare: |
+      sed -i 's|("hexchat")|("hexchat:hexchat")|' src/fe-gtk/notifications/notification-libnotify.c
+      sed -i 's|Icon=hexchat|Icon=/share/icons/hicolor/scalable/apps/hexchat.svg|' data/misc/hexchat.desktop.in.in
     configflags:
+      - --enable-gtkfe
       - --enable-python=python3
       - --disable-debug
       - --disable-glibtest
@@ -49,10 +54,6 @@ parts:
       - --disable-isocodes
 # FIXME: Audio notifications don't work
       - --disable-libcanberra
-    patches:
-      - fix-desktop-reference.patch
-      - fix-opening-urls.patch
-      - use-absolute-icon-path.patch
     build-packages:
       - patch
       - intltool
