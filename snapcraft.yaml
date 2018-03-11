@@ -1,5 +1,5 @@
 name: hexchat
-version: "2.12.4"
+version: "2.14.0"
 summary: HexChat IRC Client
 description: >
   HexChat is a graphical IRC client with a GTK+ GUI. Features include Python
@@ -22,12 +22,7 @@ slots:
 apps:
   hexchat:
     command: desktop-launch hexchat-wrapper
-    desktop: share/applications/hexchat.desktop
-    environment:
-      LUA_PATH: $SNAP/usr/share/lua/5.1/?.lua
-      HEXCHAT_LIBDIR: $SNAP/lib/hexchat/plugins
-# FIXME: Can't use $SNAP_LAUNCHER_ARCH_TRIPLET here
-#      LUA_CPATH: $SNAP/usr/lib/$SNAP_LAUNCHER_ARCH_TRIPLET/lua/5.1/?.so
+    desktop: share/applications/io.github.Hexchat.desktop
     plugs:
       - unity7
       - desktop-legacy
@@ -46,29 +41,21 @@ parts:
 # FIXME: Notifications can't see the desktop file or icon
     build-attributes: [no-system-libraries]
     after: [desktop-gnome-platform]
-    source: https://dl.hexchat.net/hexchat/hexchat-2.12.4-repack.tar.xz
-    plugin: autotools
+    source: https://dl.hexchat.net/hexchat/hexchat-2.14.0.tar.xz
+    plugin: meson
     # The exported desktop file is renamed and requires absolute path to icon
     prepare: |
-      sed -i 's|("hexchat")|("hexchat:hexchat")|' src/fe-gtk/notifications/notification-libnotify.c
-      sed -i 's|Icon=hexchat|Icon=/share/icons/hicolor/scalable/apps/hexchat.svg|' data/misc/hexchat.desktop.in.in
-    configflags:
-      - --enable-gtkfe
-      - --enable-openssl
-      - --enable-libnotify
-      - --enable-libproxy
-      - --enable-dbus
-      - --enable-python=python3
-      - --enable-lua=luajit
-      - --disable-debug
-      - --disable-glibtest
+      sed -i 's|io.github.Hexchat|hexchat:hexchat|g' src/fe-gtk/notifications/notification-libnotify.c
+      sed -i 's|Icon=hexchat|Icon=/share/icons/hicolor/scalable/apps/hexchat.svg|' data/misc/io.github.Hexchat.desktop.in.in
+      sed -i 's|Exec=hexchat|Exec=hexchat-wrapper|' data/misc/io.github.Hexchat.desktop.in.in
+    meson-parameters:
+      - --prefix=/
+      - --buildtype=release
 # FIXME: Compiles build path into project...
-      - --disable-isocodes
+      - -Dwith-isocodes=false
 # FIXME: Audio notifications don't work
-      - --disable-libcanberra
+      - -Dwith-libcanberra=false
     build-packages:
-      - intltool
-      - libtool
       - libssl-dev
       - libdbus-glib-1-dev
       - libglib2.0-dev
@@ -80,8 +67,8 @@ parts:
       - libluajit-5.1-dev
     prime:
       - -include
-      - -lib/pkgconfig
-      - -share/appdata
+      - -lib/*linux*/pkgconfig
+      - -share/metainfo
       - -share/man
   scripting-langs:
     plugin: nil
@@ -124,4 +111,5 @@ parts:
     source: data
     plugin: dump
     organize:
+# FIXME: Can't use $SNAP_LAUNCHER_ARCH_TRIPLET in environment overrides so need wrapper
       wrapper: bin/hexchat-wrapper
