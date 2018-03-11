@@ -2,19 +2,16 @@ name: hexchat
 version: "2.14.0"
 summary: HexChat IRC Client
 description: >
-  HexChat is a graphical IRC client with a GTK+ GUI. Features include Python
-  and Perl scripting support, a plugin API, multiple server/channel windows,
-  spell checking, multiple authentication methods including SASL, and
-  customizable notifications. For more information on IRC, see
-  http://irchelp.org/.
+  HexChat is an easy to use yet extensible IRC Client. It allows you to securely join multiple networks and talk to users privately or in channels using a customizable interface. You can even transfer files.
 confinement: strict
 grade: stable
-plugs:
-  gnome-3-26-1604:
-    interface: content
-    content: gnome-3-26-1604
-    target: gnome-platform
-    default-provider: gnome-3-26-1604
+# FIXME: Platforms are not auto-downloaded
+#plugs:
+#  gnome-3-26-1604:
+#    interface: content
+#    content: gnome-3-26-1604
+#    target: gnome-platform
+#    default-provider: gnome-3-26-1604
 slots:
   hexchat:
     interface: dbus
@@ -31,17 +28,19 @@ apps:
 #      - pulseaudio
       - network
       - network-bind
-      - gnome-3-26-1604
+#      - gnome-3-26-1604
 parts:
-  desktop-gnome-platform:
-    stage:
-      # We override this in hexchat-copy with gtk2 version
-      - -flavor-select
+#  desktop-gnome-platform:
+#    stage:
+#      # We override this in hexchat-copy with gtk2 version
+#      - -flavor-select
   hexchat:
 # FIXME: Spell check needs dictionaries
 # FIXME: Notifications can't see the desktop file or icon
-    build-attributes: [no-system-libraries]
-    after: [desktop-gnome-platform]
+# FIXME: Platform see above:
+#    after: [desktop-gnome-platform]
+#    build-attributes: [no-system-libraries]
+    after: [desktop-gtk2]
     source: https://dl.hexchat.net/hexchat/hexchat-2.14.0.tar.xz
     plugin: meson
     # The exported desktop file is renamed and requires absolute path to icon
@@ -71,26 +70,14 @@ parts:
       - -lib/*linux*/pkgconfig
       - -share/metainfo
       - -share/man
-  scripting-langs:
-    plugin: nil
-    stage-packages:
-      - libpython3.5
-      - libluajit-5.1-2
-      - libperl5.22
-    prime:
-      - -usr/bin
-      - -usr/sbin
-      - -usr/lib/mime
-      - -usr/lib/gcc
-      - -usr/lib/*linux*/libsqlite3.so*
-      - -usr/share/doc
-      - -usr/share/man
-      - -usr/share/bug
-      - -usr/share/lintian
   lua-lgi:
     plugin: nil
     stage-packages:
       - lua-lgi
+      - gir1.2-freedesktop
+      - gir1.2-glib-2.0
+      - gir1.2-soup-2.4
+      - gir1.2-gtk-2.0
     prime:
       - usr/share/lua/5.1
       - usr/lib/*linux*/lua/5.1
@@ -98,15 +85,6 @@ parts:
       - usr/lib/*linux*/libffi.so*
       - usr/lib/*linux*/libgirepository-1.0.so*
       - usr/lib/*linux*/liblua5.1*.so*
-  gi-bindings:
-    plugin: nil
-    stage-packages:
-      - gir1.2-freedesktop
-      - gir1.2-glib-2.0
-      - gir1.2-soup-2.4
-      - gir1.2-gtk-2.0
-    prime:
-      - usr/lib/*linux*/girepository-1.0
       - usr/lib/girepository-1.0
   wrappers:
     source: data
