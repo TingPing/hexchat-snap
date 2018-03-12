@@ -34,13 +34,17 @@ parts:
 #    stage:
 #      # We override this in hexchat-copy with gtk2 version
 #      - -flavor-select
+  meson:
+    source: https://github.com/mesonbuild/meson/releases/download/0.45.0/meson-0.45.0.tar.gz
+    plugin: python
+    stage: [-]
   hexchat:
 # FIXME: Spell check needs dictionaries
 # FIXME: Notifications can't see the desktop file or icon
 # FIXME: Platform see above:
 #    after: [desktop-gnome-platform]
 #    build-attributes: [no-system-libraries]
-    after: [desktop-gtk2]
+    after: [desktop-gtk2, meson]
     source: https://dl.hexchat.net/hexchat/hexchat-2.14.0.tar.xz
     plugin: meson
     # The exported desktop file is renamed and requires absolute path to icon
