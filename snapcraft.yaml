@@ -25,7 +25,7 @@ apps:
       - unity7
       - desktop-legacy
       - x11
-#      - pulseaudio
+      - pulseaudio
       - network
       - network-bind
 #      - gnome-3-26-1604
@@ -58,8 +58,6 @@ parts:
       - --buildtype=release
 # FIXME: Compiles build path into project...
       - -Dwith-isocodes=false
-# FIXME: Audio notifications don't work
-      - -Dwith-libcanberra=false
     build-packages:
       - gettext
       - libssl-dev
@@ -68,9 +66,13 @@ parts:
       - libgtk2.0-dev
       - libnotify-dev
       - libproxy-dev
+      - libcanberra-dev
       - python3-dev
       - libperl-dev
       - libluajit-5.1-dev
+    stage-packages:
+      - sound-theme-freedesktop
+      - libcanberra-pulse
     prime:
       - -include
       - -lib/*linux*/pkgconfig
