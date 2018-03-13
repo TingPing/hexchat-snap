@@ -60,6 +60,7 @@ parts:
 # FIXME: Audio notifications don't work
       - -Dwith-libcanberra=false
     build-packages:
+      - gettext
       - libssl-dev
       - libdbus-glib-1-dev
       - libglib2.0-dev
