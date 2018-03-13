@@ -37,7 +37,7 @@ parts:
   meson:
     source: https://github.com/mesonbuild/meson/releases/download/0.45.0/meson-0.45.0.tar.gz
     plugin: python
-    stage: [-]
+    prime: [-*]
   hexchat:
 # FIXME: Spell check needs dictionaries
 # FIXME: Notifications can't see the desktop file or icon
@@ -76,6 +76,7 @@ parts:
       - -lib/*linux*/pkgconfig
       - -share/metainfo
       - -share/man
+# FIXME: snapcraft pulls in tons of unnecessary garbage, keep removing more
   lua-lgi:
     plugin: nil
     stage-packages:
