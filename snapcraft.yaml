@@ -45,7 +45,7 @@ parts:
 #    after: [desktop-gnome-platform]
 #    build-attributes: [no-system-libraries]
     after: [desktop-gtk2, meson]
-    source: https://dl.hexchat.net/hexchat/hexchat-2.14.0.tar.xz
+    source: https://dl.hexchat.net/hexchat/hexchat-2.14.1.tar.xz
     plugin: meson
     # The exported desktop file is renamed and requires absolute path to icon
     prepare: |
