@@ -24,7 +24,7 @@ apps:
     plugs:
       - unity7
       - desktop-legacy
-      - x11
+      - 'x11'
 #      - pulseaudio
       - network
       - network-bind
