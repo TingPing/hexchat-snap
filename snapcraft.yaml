@@ -5,13 +5,26 @@ description: >
   HexChat is an easy to use yet extensible IRC Client. It allows you to securely join multiple networks and talk to users privately or in channels using a customizable interface. You can even transfer files.
 confinement: strict
 grade: stable
-# FIXME: Platforms are not auto-downloaded
-#plugs:
-#  gnome-3-26-1604:
-#    interface: content
-#    content: gnome-3-26-1604
-#    target: gnome-platform
-#    default-provider: gnome-3-26-1604
+base: core18
+plugs:
+  gtk-2-engines:
+    interface: content
+    target: $SNAP/lib/gtk-2.0
+    default-provider: gtk2-common-themes
+  gtk-2-themes:
+    interface: content
+    target: $SNAP/share/themes
+    default-provider: gtk2-common-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/share/icons
+    default-provider: gtk-common-themes
+
+environment:
+  GTK_PATH: $SNAP/lib/gtk-2.0
+  GTK_DATA_PREFIX: $SNAP
+  XDG_DATA_DIRS: $SNAP/share:$XDG_DATA_DIRS
+
 slots:
   hexchat:
     interface: dbus
@@ -30,29 +43,39 @@ apps:
       - network-bind
 #      - gnome-3-26-1604
 parts:
-#  desktop-gnome-platform:
-#    stage:
-#      # We override this in hexchat-copy with gtk2 version
-#      - -flavor-select
-  meson:
-    source: https://github.com/mesonbuild/meson/releases/download/0.45.0/meson-0.45.0.tar.gz
-    plugin: python
-    prime: [-*]
+  desktop-gtk2:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: gtk
+    plugin: make
+    make-parameters: ["FLAVOR=gtk2"]
+    build-packages:
+      - libgtk2.0-dev
+    stage-packages:
+      - libxkbcommon0  # XKB_CONFIG_ROOT
+      - shared-mime-info
+      - libgtk2.0-0
+      - libgdk-pixbuf2.0-0
+      - libglib2.0-bin
+      - libgtk2.0-bin
+      - unity-gtk2-module
+      - locales-all
+      - libappindicator1
+      - xdg-user-dirs
+        
   hexchat:
 # FIXME: Spell check needs dictionaries
 # FIXME: Notifications can't see the desktop file or icon
 # FIXME: Platform see above:
-#    after: [desktop-gnome-platform]
-#    build-attributes: [no-system-libraries]
-    after: [desktop-gtk2, meson]
+    after: [desktop-gtk2 ]
     source: https://dl.hexchat.net/hexchat/hexchat-2.14.2.tar.xz
     plugin: meson
     # The exported desktop file is renamed and requires absolute path to icon
-    prepare: |
+    override-build: |
       # Fix desktop file reference (Doesn't work in Unity?)
       sed -i 's|io.github.Hexchat|hexchat_hexchat|g' src/fe-gtk/notifications/notification-libnotify.c
       # Absolute path to icon required...
       sed -i 's|Icon=hexchat|Icon=/share/icons/hicolor/scalable/apps/hexchat.svg|' data/misc/io.github.Hexchat.desktop.in.in
+      snapcraftctl build
     meson-parameters:
       - --prefix=/
       - --buildtype=release
@@ -71,6 +94,10 @@ parts:
       - python3-dev
       - libperl-dev
       - libluajit-5.1-dev
+    stage-packages:
+      - libnotify4
+      - libproxy1v5
+      - libdbus-glib-1-2
     prime:
       - -include
       - -lib/*linux*/pkgconfig
