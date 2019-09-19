@@ -41,7 +41,6 @@ apps:
 #      - pulseaudio
       - network
       - network-bind
-#      - gnome-3-26-1604
 parts:
   desktop-gtk2:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
@@ -57,9 +56,7 @@ parts:
       - libgdk-pixbuf2.0-0
       - libglib2.0-bin
       - libgtk2.0-bin
-      - unity-gtk2-module
       - locales-all
-      - libappindicator1
       - xdg-user-dirs
         
   hexchat:
