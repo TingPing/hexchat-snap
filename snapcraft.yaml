@@ -32,15 +32,15 @@ slots:
     name: org.hexchat.service
 apps:
   hexchat:
-    command: desktop-launch hexchat-wrapper
+    command: desktop-launch hexchat
     desktop: share/applications/io.github.Hexchat.desktop
     plugs:
-      - unity7
+      - desktop
       - desktop-legacy
-      - 'x11'
 #      - pulseaudio
       - network
       - network-bind
+      - x11
 parts:
   desktop-gtk2:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
@@ -117,9 +117,3 @@ parts:
       - usr/lib/*linux*/libgirepository-1.0.so*
       - usr/lib/*linux*/liblua5.1*.so*
       - usr/lib/girepository-1.0
-  wrappers:
-    source: data
-    plugin: dump
-    organize:
-# FIXME: Can't use $SNAP_LAUNCHER_ARCH_TRIPLET in environment overrides so need wrapper
-      wrapper: bin/hexchat-wrapper
