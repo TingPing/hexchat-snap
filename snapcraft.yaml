@@ -32,8 +32,12 @@ slots:
     name: org.hexchat.service
 apps:
   hexchat:
-    command: desktop-launch hexchat
+    command: desktop-launch hexchat --existing
     desktop: share/applications/io.github.Hexchat.desktop
+    environment:
+      HEXCHAT_LIBDIR: $SNAP/lib/$SNAPCRAFT_ARCH_TRIPLET/hexchat/plugins
+      LUA_CPATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lua/5.1/?.so
+      LUA_PATH: $SNAP/usr/share/lua/5.1/?.lua
     plugs:
       - desktop
       - desktop-legacy
@@ -95,6 +99,9 @@ parts:
       - libnotify4
       - libproxy1v5
       - libdbus-glib-1-2
+      - libluajit-5.1-2
+      - libperl5.26
+      - libpython3.6
     prime:
       - -include
       - -lib/*linux*/pkgconfig
